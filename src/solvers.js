@@ -81,29 +81,66 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined;
-  var board = new Board({'n': n})
+  // var solution; 
+  // var board = new Board({'n': n});
+  // var queens = 0;
+
+  // var helper = function(board) {
+  //   if(queens === n) {
+  //     return board.rows();
+  //   }
+  //   for(var row = 0; row < board.rows().length; row++) {
+  //     for(var col = 0; col < board.rows().length; col++) {
+  //       if(!Boolean(board.rows()[row][col])) {
+  //         board.togglePiece(row, col);
+  //         if(board.hasAnyQueensConflicts()) {
+  //           board.togglePiece(row,col);
+  //         } else {
+  //           queens++;
+  //           return helper(board);
+  //         }
+  //       } 
+  //     }
+  //   } 
+  // }
+
+  // solution = helper(board);
+  // return solution;
+
+  var board = new Board({'n': n});
+  var solution = board.rows().slice();
+  var queens = 0;
 
   var helper = function (board, rowNumber) {
-    for(var colNumber= 0; colNumber < board.rows().length; colNumber++) {
+    for(var colNumber = 0; colNumber < board.rows().length; colNumber++) {
       board.togglePiece(rowNumber, colNumber);
+      queens++;
       if(board.hasAnyQueensConflicts()) {
         board.togglePiece(rowNumber, colNumber);
+        queens--;
       } else {
         if(rowNumber < board.rows().length - 1) {
           var deepCopy = new Board(board.rows());
           var nextNumber = rowNumber + 1;
           helper(deepCopy, nextNumber);
         } else {
-          solution = new Board(board.rows().slice());
+          solution = board.rows().slice();
         }
-        board.togglePiece(rowNumber, colNumber);
+        if(queens === n){
+          return;
+        } else {
+          board.togglePiece(rowNumber, colNumber);
+          queens--;          
+        }
       }
     }
   }
 
   helper(board, 0);
-  return solution.rows();
+  if(n===0){
+    return [];
+  }
+  return solution;
 };
 
 
