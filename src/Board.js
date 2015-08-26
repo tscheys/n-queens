@@ -50,6 +50,14 @@
       );
     },
 
+    optimizedQueenConflicts: function(rowIndex, colIndex) {
+      return (
+        this.hasColConflictAt(colIndex) ||
+        this.hasMajorDiagonalConflictAt(this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex)) ||
+        this.hasMinorDiagonalConflictAt(this._getFirstRowColumnIndexForMinorDiagonalOn(rowIndex, colIndex))
+      );
+    },
+
     hasAnyQueensConflicts: function() {
       return this.hasAnyRooksConflicts() || this.hasAnyMajorDiagonalConflicts() || this.hasAnyMinorDiagonalConflicts();
     },
@@ -104,8 +112,23 @@
       var sum = 0;
       for(var i=0; i < allRows.length; i++){
         sum += allRows[i][colIndex];
+        if(sum > 1){
+          return true;
+        }
       }
-      return sum > 1; 
+      return false; 
+    },
+
+    optimizedColConflict: function(rowIndex, colIndex) {
+      var allRows = this.rows();
+      var sum = 0;
+      for(var i=0; i < allRows.length; i++){
+        sum += allRows[i][colIndex];
+        if(sum > 1){
+          return true;
+        }
+      }
+      return false; 
     },
 
     // test if any columns on this board contain conflicts
